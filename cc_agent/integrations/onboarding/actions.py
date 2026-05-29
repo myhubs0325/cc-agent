@@ -2129,6 +2129,9 @@ class OnboardingAdapter(BaseAdapter):
 
         self._launch_adspower_if_available()
         login_attempted = self._attempt_adspower_login(profile)
+        if login_attempted:
+            logger.info("Login submitted; waiting 5 seconds for verification to complete.")
+            time.sleep(5.0)
         if self._wait_for_adspower_service_ready(timeout_seconds=20):
             self._close_adspower_guidance_windows()
             context.adspower_purchase_status = "ready"
