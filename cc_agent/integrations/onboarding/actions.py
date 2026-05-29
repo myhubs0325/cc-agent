@@ -2360,6 +2360,9 @@ class OnboardingAdapter(BaseAdapter):
                     logger.info("AdsPower login window detected; attempting automatic login.")
                     login_attempted = self._attempt_adspower_login(profile)
                     logger.info("AdsPower automatic login attempt result: %s", login_attempted)
+                    if login_attempted:
+                        logger.info("Login submitted; waiting 5 seconds for verification to complete.")
+                        time.sleep(5.0)
             time.sleep(0.4)
         return {
             "state": "login_window" if login_window_seen else ("window_only" if window_seen else "timeout"),
