@@ -1,0 +1,24 @@
+diff --git a/cc_agent/integrations/onboarding/actions.py b/cc_agent/integrations/onboarding/actions.py
+index 88a38c0..fc123ef 100644
+--- a/cc_agent/integrations/onboarding/actions.py
++++ b/cc_agent/integrations/onboarding/actions.py
+@@ -2129,6 +2129,9 @@ class OnboardingAdapter(BaseAdapter):
+ 
+         self._launch_adspower_if_available()
+         login_attempted = self._attempt_adspower_login(profile)
++        if login_attempted:
++            logger.info("Login submitted; waiting 5 seconds for verification to complete.")
++            time.sleep(5.0)
+         if self._wait_for_adspower_service_ready(timeout_seconds=20):
+             self._close_adspower_guidance_windows()
+             context.adspower_purchase_status = "ready"
+@@ -2360,6 +2363,9 @@ class OnboardingAdapter(BaseAdapter):
+                     logger.info("AdsPower login window detected; attempting automatic login.")
+                     login_attempted = self._attempt_adspower_login(profile)
+                     logger.info("AdsPower automatic login attempt result: %s", login_attempted)
++                    if login_attempted:
++                        logger.info("Login submitted; waiting 5 seconds for verification to complete.")
++                        time.sleep(5.0)
+             time.sleep(0.4)
+         return {
+             "state": "login_window" if login_window_seen else ("window_only" if window_seen else "timeout"),
