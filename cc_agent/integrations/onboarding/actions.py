@@ -72,8 +72,8 @@ class OnboardingAdapter(BaseAdapter):
         self._setup_workspace_flow_name = str(config.get("setup_workspace_flow_name", "onboarding_workspace"))
         self._proxy_probe_timeout_seconds = float(config.get("proxy_probe_timeout_seconds", 4))
         self._adspower_ready_timeout_seconds = min(
-            max(float(config.get("adspower_ready_timeout_seconds", 10.0)), 3.0),
-            15.0,
+            max(float(config.get("adspower_ready_timeout_seconds", 30.0)), 3.0),
+            60.0,
         )
         self._adspower_download_url = str(config.get("adspower_download_url", "")).strip()
         self._adspower_register_url = str(config.get("adspower_register_url", "")).strip()
@@ -2130,9 +2130,9 @@ class OnboardingAdapter(BaseAdapter):
         self._launch_adspower_if_available()
         login_attempted = self._attempt_adspower_login(profile)
         if login_attempted:
-            logger.info("Login submitted; waiting 5 seconds for verification to complete.")
-            time.sleep(5.0)
-        if self._wait_for_adspower_service_ready(timeout_seconds=20):
+            logger.info("Login submitted; waiting 8 seconds for verification to complete.")
+            time.sleep(8.0)
+        if self._wait_for_adspower_service_ready(timeout_seconds=40):
             self._close_adspower_guidance_windows()
             context.adspower_purchase_status = "ready"
             context.last_success_step = step.action
@@ -2364,8 +2364,8 @@ class OnboardingAdapter(BaseAdapter):
                     login_attempted = self._attempt_adspower_login(profile)
                     logger.info("AdsPower automatic login attempt result: %s", login_attempted)
                     if login_attempted:
-                        logger.info("Login submitted; waiting 5 seconds for verification to complete.")
-                        time.sleep(5.0)
+                        logger.info("Login submitted; waiting 8 seconds for verification to complete.")
+                        time.sleep(8.0)
             time.sleep(0.4)
         return {
             "state": "login_window" if login_window_seen else ("window_only" if window_seen else "timeout"),
