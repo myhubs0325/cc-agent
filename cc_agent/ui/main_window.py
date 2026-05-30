@@ -594,16 +594,21 @@ class MainWindow(QMainWindow):
             path = resolver()
         except Exception:
             return False
-        return isinstance(path, Path) and path.exists()
+        # 必须同时满足：是 Path 类型 AND 文件实际存在
+        return isinstance(path, Path) and str(path) and path.exists()
 
     def _has_local_dbit_support(self) -> bool:
         adapter = self._context.registry.get("dbit_octopus")
+        # 优先使用 _resolve_existing_executable_path（只返回存在的路径）
         resolver = getattr(adapter, "_resolve_existing_executable_path", None)
         if not callable(resolver):
             return False
         try:
             path = resolver()
         except Exception:
+            return False
+        # _resolve_existing_executable_path 返回 Path|None，None 表示没找到
+        if path is None:
             return False
         return isinstance(path, Path) and path.exists()
 
