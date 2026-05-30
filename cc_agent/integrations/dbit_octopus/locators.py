@@ -51,6 +51,8 @@ DEFAULT_LOCATORS = {
         "\u5bfc\u5165\u8d44\u6599\u5305",
         "\u8d44\u6599\u5305",
         "wizard",
+        "\u667a\u80fd",
+        "\u5411\u5bfc",
     ],
     "manual_fill_tokens": [
         "\u6211\u8981\u81ea\u5df1\u624b\u52a8\u586b\u5199",

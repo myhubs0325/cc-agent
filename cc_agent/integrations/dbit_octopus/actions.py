@@ -281,7 +281,11 @@ class DbitOctopusAdapter(BaseAdapter):
             skip_child_classes=self._webview_skip_classes(),
         )
         if self._is_smart_wizard_page(window):
-            self._switch_from_smart_wizard_to_manual_fill(window)
+            switched = self._switch_from_smart_wizard_to_manual_fill(window)
+            if switched:
+                logger.info("Smart wizard switch completed; waiting for page to load.")
+                time.sleep(1.5)
+                window, meta = self._frontstage_window_or_control_panel(context)
         if meta.get("control_panel_authorized"):
             if self._is_system_settings_page(window):
                 return RunStatus.SUCCEEDED, "当前已处于系统设置页，继续执行。", meta, []
@@ -1529,15 +1533,15 @@ class DbitOctopusAdapter(BaseAdapter):
                 window,
                 texts=DEFAULT_LOCATORS["manual_fill_tokens"],
                 control_types=DEFAULT_LOCATORS["generic_control_types"],
-                max_depth=16,
-                max_nodes=1200,
+                max_depth=24,
+                max_nodes=2400,
                 skip_child_classes=self._webview_skip_classes(),
             )
             logger.info("DBit smart wizard detected; switched to manual fill via %s", clicked_text)
         except Exception as exc:
             logger.warning("DBit smart wizard detected but manual fill click failed: %s", exc)
             return False
-        time.sleep(1.0)
+        time.sleep(2.0)
         return True
 
     def _is_clone_config_page(self, window: BaseWrapper) -> bool:
@@ -1685,8 +1689,8 @@ class DbitOctopusAdapter(BaseAdapter):
             window,
             texts=texts,
             control_types=DEFAULT_LOCATORS["generic_control_types"],
-            max_depth=16,
-            max_nodes=1200,
+            max_depth=24,
+            max_nodes=2400,
             skip_child_classes=self._webview_skip_classes(),
         )
 
